@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -10,13 +9,8 @@ import { RegistrationFormComponent } from './registration-form/registration-form
 import {HeaderComponent} from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { AuthService } from './services/auth.service';
+import { AppRoutingModule } from './app-routing.module';
 
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component:HomeComponent},
-  {path: 'login', component: LoginFormComponent},
-  {path: 'registration', component: RegistrationFormComponent}
-];
 
 @NgModule({
   declarations: [
@@ -29,7 +23,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule,
     HttpClientModule
   ],
   providers: [
