@@ -1,0 +1,103 @@
+<div class="container">
+    <div class="py-4">
+        <!-- Registeration Form -->
+        <form (ngSubmit)="onSubmit()" #f="ngForm">
+
+            <!-- Username -->
+            <span *ngIf="username.invalid && username.touched && username.dirty" class="hint" style="font-size: small;">Username must be at least 4 char</span>
+            <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-white">
+                        <i class="fa fa-user text-muted"></i>
+                    </span>
+                </div>
+                <input type="text" id="username" placeholder="Username" class="form-control bg-white" ngModel
+                    name="username" required minlength="4" #username="ngModel">
+            </div>
+
+            <!-- Password -->
+            <span
+                *ngIf="password.invalid && (password.dirty && password.touched)"
+                class="hint" style="font-size: small;">Password should contain at least 1 of (lowercase, uppercase, special char and number) and length at least 8!</span>
+            <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-white ">
+                        <i class="fa fa-lock text-muted"></i>
+                    </span>
+                </div>
+                <input id="password" type="password" name="password" placeholder="Password"
+                    class="form-control bg-white" ngModel required #password="ngModel" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{7,}">
+            </div>
+
+            <!-- Password Confirmation -->
+            <span
+                *ngIf="password.touched && password.dirty && confirmPassword.dirty && confirmPassword.touched && !(password.value == confirmPassword.value) "
+                class="hint" style="font-size: small;">Confirm password is not the same as password!</span>
+            <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-white">
+                        <i class="fa fa-lock text-muted"></i>
+                    </span>
+                </div>
+                <input id="confirmPassword" type="password" name="confirmPassword" placeholder="Confirm Password"
+                    class="form-control bg-white border-md" ngModel required #confirmPassword="ngModel">
+
+            </div>
+
+            <!-- Email Address -->
+            <span *ngIf="email.invalid && email.touched && email.dirty" class="hint" style="font-size: small;">Please enter a valid email!</span>
+            <div class="input-group  mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-white">
+                        <i class="fa fa-envelope text-muted"></i>
+                    </span>
+                </div>
+
+                <input id="email" type="email" name="email" placeholder="Email Address"
+                    class="form-control bg-white border-md" ngModel required #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            </div>
+
+
+
+            <!-- Location -->
+            <div *ngFor="let index of indexes">
+                <div class="input-group mb-4" >
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-white">
+                            <i class="fa fa-map-marker text-muted"></i>
+                        </span>
+                    </div>
+    
+                    <input id="location" type="location" name="location" placeholder="Location"
+                        class="form-control bg-white  border-md" ngModel required #location="ngModel">
+                        <span class="input-group-text bg-white" (click)="removeLocation(index)">
+                            <i class="fa fa-trash text-muted" ></i>
+                        </span>
+                </div>
+                
+            </div>
+
+            <a (click)="plusLocation()" class="btn btn-outline-success btn-sm">
+                Add more locations
+            </a>
+
+            <!-- Terms and conditions -->
+            <div class="input-group  mb-2">
+                <div class="radio">
+                    <label>
+                        <input type="checkbox" name="terms" ngModel value="terms" required>
+                        I have read and accept the terms of use
+                    </label>
+                </div>
+            </div>
+
+
+
+            <!-- Submit Button -->
+            <button class="btn btn-primary btn-block " style="background-color: lightgreen; border: transparent;"
+                type="submit" [disabled]="!f.valid">Sign up</button>
+
+
+        </form>
+    </div>
+</div>
