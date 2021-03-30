@@ -2,7 +2,6 @@ import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { UserModel } from '../model/userModel';
 
 @Component({
   selector: 'app-registration-form',
@@ -16,15 +15,15 @@ export class RegistrationFormComponent{
 
   indexes = [0]
   counter = 1;
-  signedUp:Boolean = false;
-
+  signedUp = false;
+  isLoading = false;
+  error?: string;
   
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router){
-    
-  }
+  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router){}
 
   onSubmit(){
+    this.isLoading = true;
     var username = this.signupForm?.value.username;
     var email = this.signupForm?.value.email;
     var locations: String[] = [];
@@ -33,16 +32,16 @@ export class RegistrationFormComponent{
         locations.push(this.linkRefs?.toArray()[i].viewModel);
       }
     }
-    let newUser = new UserModel(username,this.signupForm?.value.password,email,locations);
-    this.authService.registerUser(newUser).subscribe(
-      (res) => {
-
+    this.authService.registerUser({username: username, password: this.signupForm?.value.password,email: email, locations: locations}).subscribe(
+      () => {
+        this.isLoading = false;
+        this.router.navigate(['login']);
       },
       (err) => {
-        
+        this.error = err;
+        this.isLoading = false;
       }
     );
-    // this.router.navigate(['login']);
   }
 
   plusLocation(){

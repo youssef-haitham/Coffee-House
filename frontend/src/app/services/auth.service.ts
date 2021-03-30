@@ -1,61 +1,51 @@
-import { HttpClient} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from '../environments/environment';
 import * as moment from "moment";
-import { UserModel } from '../model/userModel';
-import { Subject } from "rxjs";
+import { User } from '../model/userModel';
+import { BehaviorSubject, throwError } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+
 
 @Injectable()
 export class AuthService {
 
-    userLoggedIn = new Subject<boolean>();
+    user = new BehaviorSubject<User>(null);
+    currentUser: User;
 
-    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { 
+    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
-     this.userLoggedIn.next(this.isLoggedIn());
-     
+    registerUser(json: { username: String, password: String, email: String, locations: Array<String> }) {
+        return this.http.post(environment.apiUrl + 'signUp', json, { observe: 'response' }).pipe(catchError((err) => {
+            return this.handleError(err);
+        }));
     }
 
-    registerUser(json: UserModel) {
-        return this.http.post(environment.apiUrl + 'signUp', json, { observe: 'response' });
-    }
-
-    async loginUser(userData: { username: String, password: String }){
-        await this.http.post(environment.apiUrl + 'signIn', userData, { observe: 'response' }).subscribe(
-            (res: any) => {
-                if (res.status == 200) {
-                    this.setSession(res.body.data);
-                    this.userLoggedIn.next(true);
-                    alert("WELCOME BACK " + userData.username.toUpperCase() + "!");
-                }
-                else{
-                    this.userLoggedIn.next(false);
-                    alert("An error happened");
-                }
-            },
-            (err) => {
-                this.userLoggedIn.next(false);
-                alert(err.error.msg);
+    loginUser(userData: { email: String, password: String }) {
+        return this.http.post<Object>(environment.apiUrl + 'signIn', userData, { observe: 'response' }).pipe(catchError((err) => {
+            return this.handleError(err);
+        }), tap((res: any) => {
+            if (res.status == 200) {
+                this.setSession(res.body.data);
             }
-        );
+        }));
     }
 
 
 
     private setSession(authResult: any) {
         const expiresAt = moment().add(authResult.exp - authResult.iat, 'second');
-        localStorage.setItem('id_token', authResult.id + "");
+        this.currentUser = new User(authResult.id, authResult.token, authResult.username);
+        localStorage.setItem("current_user", JSON.stringify(authResult));
         localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
+        this.user.next(authResult);
     }
 
     public logout() {
-        localStorage.removeItem("id_token");
+        localStorage.removeItem("current_user");
         localStorage.removeItem("expires_at");
-        this.userLoggedIn.next(false);
-        this.router.navigate(['home']);
+        this.user.next(undefined);
     }
 
     public isLoggedIn() {
@@ -69,5 +59,11 @@ export class AuthService {
             return moment(expiresAt);
         }
         return null;
+    }
+
+    private handleError(err:HttpErrorResponse) {
+        let errorMessage = 'An unknown error occured!'
+        if (err.error.msg != null) errorMessage = err.error.msg;
+        return throwError(errorMessage);
     }
 }

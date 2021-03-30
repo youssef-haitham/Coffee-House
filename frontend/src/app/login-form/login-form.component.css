@@ -9,13 +9,27 @@ input.ng-invalid.ng-touched, select.ng-invalid.ng-touched{
 
 .container{
   background-color: white;
-  width: 30%; 
+  width: 40%; 
   height: fit-content;
   position: absolute; 
   top: 50%; 
   left: 50%; 
   transform: translate(-50%,-50%); 
   box-shadow: 0 20px 500px 50px black;
+}
+
+.spinner{
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%,-50%); 
+}
+
+.alert {
+  height: 35px;
+  line-height:30px;
+  padding:0px 20px;
+  overflow: hidden;
 }
 
 

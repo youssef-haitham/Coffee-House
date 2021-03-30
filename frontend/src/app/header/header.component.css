@@ -3,5 +3,6 @@ li a {
 }
 
 li a:hover {
+    color: #1515e2;
     background-color: grey;
 }

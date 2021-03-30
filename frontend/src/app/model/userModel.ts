@@ -1,13 +1,8 @@
-export class UserModel{
-    username?:String;
-    password?:String;
-    email?:String;
-    locations?: Array<String>;
+export class User{
 
-    constructor(username:String, password:String, email:String, locations: Array<String>){
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.locations = locations;
+    constructor(public id:String,  private token:String, public username:String ){}
+
+    public getToken() {
+        return this.token;
     }
 }

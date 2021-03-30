@@ -10,6 +10,7 @@ import {HeaderComponent} from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { AuthService } from './services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { AppRoutingModule } from './app-routing.module';
     LoginFormComponent,
     RegistrationFormComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -26,8 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [
-    AuthService],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

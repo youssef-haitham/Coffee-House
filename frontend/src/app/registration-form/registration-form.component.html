@@ -1,7 +1,15 @@
-<div class="container">
+<div class="spinner" *ngIf="isLoading">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div class="container" *ngIf="!isLoading">
     <div class="py-4">
         <!-- Registeration Form -->
         <form (ngSubmit)="onSubmit()" #f="ngForm">
+
+            <div class="alert alert-danger" *ngIf="error">
+                <p>{{ error }}</p>
+            </div>
 
             <!-- Username -->
             <span *ngIf="username.invalid && username.touched && username.dirty" class="hint" style="font-size: small;">Username must be at least 4 char</span>

@@ -1,8 +1,16 @@
-<div class="container">
+<div class="spinner" *ngIf="isLoading" >
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div class="container" *ngIf="!isLoading">
+
     <div class="py-4">
         <!-- Registeration Form -->
-        <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <form (ngSubmit)="onSubmit()" #f="ngForm" >
 
+            <div class="alert alert-danger" *ngIf="error">
+                <p>{{ error }}</p>
+            </div>
+            
             <!-- Username -->
             <div class="input-group mb-4">
                 <div class="input-group-prepend">
@@ -10,8 +18,8 @@
                         <i class="fa fa-user text-muted"></i>
                     </span>
                 </div>
-                <input type="text" id="username" value="" placeholder="Username" class="form-control bg-white" ngModel
-                    name="username" required>
+                <input type="email" id="email" value="" placeholder="Email" class="form-control bg-white" ngModel
+                    name="email" email required>
             </div>
 
             <!-- Password -->
