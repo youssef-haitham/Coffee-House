@@ -16,8 +16,16 @@ export class AuthService {
 
     constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
         if(this.isLoggedIn()){
-            this.currentUser = JSON.parse(localStorage.getItem("current_user"));
-            this.user.next(this.currentUser);
+            const userData: {
+                id: String;
+                token: String;
+                username: String
+            } = JSON.parse(localStorage.getItem("current_user"));
+            this.currentUser = new User(userData.id,userData.token,userData.username);
+            if(this.currentUser.getToken() && this.isLoggedIn()){
+                this.user.next(this.currentUser);
+            }
+            
         }
     }
 
@@ -32,7 +40,6 @@ export class AuthService {
             return this.handleError(err);
         }), tap((res: any) => {
             if (res.status == 200) {
-                console.log(res.body.data);
                 this.setSession(res.body.data);
             }
         }));
@@ -52,7 +59,7 @@ export class AuthService {
         localStorage.removeItem("current_user");
         localStorage.removeItem("expires_at");
         this.currentUser = null;
-        this.user.next(null);
+        this.user.next(this.currentUser);
     }
 
     public isLoggedIn() {

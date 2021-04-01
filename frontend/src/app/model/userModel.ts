@@ -1,8 +1,8 @@
 export class User{
 
-    constructor(public id:String,  private token:String, public username:String ){}
+    constructor(public id:String,  public token:String, public username:String ){}
 
-    public getToken() {
+    public getToken(): String {
         return this.token;
     }
 }
