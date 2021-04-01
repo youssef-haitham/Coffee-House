@@ -155,7 +155,8 @@ module.exports.signIn = async (req, res) => {
 
 // -------- Verify token -------- //
 module.exports.verifyToken = async (req, res) => {
-    var token = req.headers.bearer;
+    var token = req.headers.bearer.split(' ')[1];
+    console.log(token);
     if (!token) return res.status(401).json({ err: "NO_TOKEN", msg: 'User is not authenticated' });
 
     jwt.verify(token, secret.secret, function (err, decoded) {
