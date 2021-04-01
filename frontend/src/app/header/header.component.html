@@ -16,9 +16,20 @@
           <li class="nav-item active" *ngIf="!isAuthenticated">
             <a class="nav-link" routerLink="/registration">Register</a>
           </li>
-          <li class="nav-item active" *ngIf="isAuthenticated">
-            <a class="nav-link" routerLink="/login" (click)="logout()">Logout</a>
+          <li class="nav-item active dropdown show" style="position: relative;" *ngIf="isAuthenticated">
+
+              <a class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- <img src="../assets/coffeeCup.jpg" style="border: 0; float: left; margin-right: 15px; width: 50px;"> -->
+                <span>{{username}}</span>
+              </a>
+             
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" >Profile</a>
+                <a class="dropdown-item" routerLink="/login" (click)="logout()" >Logout</a>
+              </div>
           </li>
+
+
         </ul>
       </div>
     </div>

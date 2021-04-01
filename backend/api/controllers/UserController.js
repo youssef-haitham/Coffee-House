@@ -113,7 +113,7 @@ module.exports.signIn = async (req, res) => {
         };
         encryption.comparePasswordToHash(req.body.password, result[0].Password).then((matches) => {
             if (matches) {
-                var token = jwt.sign({ id: result[0].Userid }, secret.secret, {
+                var token = jwt.sign({ id: result[0].Userid, username: result[0].Username }, secret.secret, {
                     expiresIn:
                         86400 // expires in 24 hours
                 });
@@ -127,6 +127,7 @@ module.exports.signIn = async (req, res) => {
                     }
                     return decoded;
                 });
+                console.log(userSession);
                 return res.status(200).json({
                     msg: 'User found.',
                     data: {

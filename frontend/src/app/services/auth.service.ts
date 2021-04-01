@@ -11,10 +11,15 @@ import { catchError, tap } from "rxjs/operators";
 @Injectable()
 export class AuthService {
 
-    user = new BehaviorSubject<User>(null);
-    currentUser: User;
+    public user = new BehaviorSubject<User>(null);
+    private currentUser: User = null;
 
-    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
+    constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+        if(this.isLoggedIn()){
+            this.currentUser = JSON.parse(localStorage.getItem("current_user"));
+            this.user.next(this.currentUser);
+        }
+    }
 
     registerUser(json: { username: String, password: String, email: String, locations: Array<String> }) {
         return this.http.post(environment.apiUrl + 'signUp', json, { observe: 'response' }).pipe(catchError((err) => {
@@ -27,6 +32,7 @@ export class AuthService {
             return this.handleError(err);
         }), tap((res: any) => {
             if (res.status == 200) {
+                console.log(res.body.data);
                 this.setSession(res.body.data);
             }
         }));
@@ -37,15 +43,16 @@ export class AuthService {
     private setSession(authResult: any) {
         const expiresAt = moment().add(authResult.exp - authResult.iat, 'second');
         this.currentUser = new User(authResult.id, authResult.token, authResult.username);
-        localStorage.setItem("current_user", JSON.stringify(authResult));
+        localStorage.setItem("current_user", JSON.stringify(this.currentUser));
         localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
-        this.user.next(authResult);
+        this.user.next(this.currentUser);
     }
 
     public logout() {
         localStorage.removeItem("current_user");
         localStorage.removeItem("expires_at");
-        this.user.next(undefined);
+        this.currentUser = null;
+        this.user.next(null);
     }
 
     public isLoggedIn() {
