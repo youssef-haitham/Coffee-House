@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { AuthService } from './services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AuthGaurdService } from './services/auth.gaurd.service';
 
 
 
@@ -30,7 +31,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     AppRoutingModule,
     HttpClientModule
     ],
-  providers: [AuthService],
+  providers: [AuthService,AuthGaurdService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
