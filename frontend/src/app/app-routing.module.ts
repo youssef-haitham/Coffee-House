@@ -10,7 +10,8 @@ const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component:HomeComponent},
   {path: 'login', component: LoginFormComponent, canActivate: [AuthGaurdService]},
-  {path: 'registration', component: RegistrationFormComponent, canActivate: [AuthGaurdService]}
+  {path: 'registration', component: RegistrationFormComponent, canActivate: [AuthGaurdService]},
+  {path: '**' ,redirectTo: 'home'},
 ];
 
 @NgModule({
